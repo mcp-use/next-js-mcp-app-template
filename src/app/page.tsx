@@ -26,7 +26,7 @@ export default function Home() {
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
             Same service, same components, two servers. Run{" "}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-sm dark:bg-zinc-800">
-              yarn mcp:dev
+              npm run mcp:dev
             </code>{" "}
             in another terminal to expose the MCP server. See{" "}
             <code className="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-sm dark:bg-zinc-800">

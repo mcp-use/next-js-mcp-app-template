@@ -21,28 +21,28 @@ The Next.js page (`src/app/page.tsx`) and the MCP widget both call `buildGreetin
 ## Getting started
 
 ```bash
-yarn install
+npm install
 ```
 
 Two dev servers — run them in separate terminals:
 
 ```bash
 # Terminal 1 — Next.js app on http://localhost:3000
-yarn dev
+npm run dev
 
 # Terminal 2 — MCP server + inspector on http://localhost:3001
-yarn mcp:dev
+npm run mcp:dev
 ```
 
 Open the inspector at `http://localhost:3001/inspector`, try the `greet` tool with any name, then try `show_greeting_card` — the widget renders the same `GreetingCard` component the home page shows.
 
 ## What the `mcp:*` scripts actually do
 
-| Command         | Wrapper around                              |
-| --------------- | ------------------------------------------- |
-| `yarn mcp:dev`  | `mcp-use dev --mcp-dir src/mcp`             |
-| `yarn mcp:build`| `mcp-use build --mcp-dir src/mcp`           |
-| `yarn mcp:start`| `mcp-use start --mcp-dir src/mcp`           |
+| Command               | Wrapper around                              |
+| --------------------- | ------------------------------------------- |
+| `npm run mcp:dev`     | `mcp-use dev --mcp-dir src/mcp`             |
+| `npm run mcp:build`   | `mcp-use build --mcp-dir src/mcp`           |
+| `npm run mcp:start`   | `mcp-use start --mcp-dir src/mcp`           |
 
 The `--mcp-dir` flag tells the CLI where your server entry and widget resources live. With `src/mcp`:
 
@@ -67,8 +67,8 @@ Two independent deployments from the same repo:
 - **The Next.js app** deploys wherever it already goes (Vercel, self-hosted, etc.). It never loads `src/mcp/`.
 - **The MCP server** deploys to Manufact Cloud:
   ```bash
-  yarn mcp:build
-  mcp-use deploy --build-command 'yarn mcp:build' --start-command 'yarn mcp:start'
+  npm run mcp:build
+  mcp-use deploy --build-command 'npm run mcp:build' --start-command 'npm run mcp:start'
   ```
   Manufact builds from your repo but only runs `mcp:build` + `mcp:start` — it never calls `next build`.
 
@@ -85,7 +85,7 @@ Env vars are managed independently on each provider. `.env.local` stays on Verce
 This template relies on `mcp-use` with the drop-in Next.js features (`--mcp-dir` flag, auto-shim, widget dedupe). If you're on a pre-release, pin to the latest canary:
 
 ```bash
-yarn add mcp-use@canary
+npm install mcp-use@canary
 ```
 
 Once the drop-in feature is in a stable release, `mcp-use: "latest"` is enough.

@@ -1,7 +1,7 @@
 /**
  * MCP server that lives inside a Next.js app.
  *
- * Run this file via `yarn mcp:dev` (which wraps
+ * Run this file via `npm run mcp:dev` (which wraps
  * `mcp-use dev --mcp-dir src/mcp`). The CLI:
  *
  *   - resolves `@/lib/...` / `@/components/...` through the project's own
