@@ -82,10 +82,14 @@ Env vars are managed independently on each provider. `.env.local` stays on Verce
 
 ## Version requirement
 
-This template relies on `mcp-use` with the drop-in Next.js features (`--mcp-dir` flag, auto-shim, widget dedupe). If you're on a pre-release, pin to the latest canary:
+This template relies on the `mcp-use` drop-in Next.js features (`--mcp-dir` flag, auto-shim, widget dedupe) from [mcp-use/mcp-use#1332](https://github.com/mcp-use/mcp-use/pull/1332). Until that PR ships in a stable release, the template pins `mcp-use` to the per-PR snapshot build published by [pkg.pr.new](https://pkg.pr.new):
 
-```bash
-npm install mcp-use@canary
+```json
+"mcp-use": "https://pkg.pr.new/mcp-use@1332"
 ```
 
-Once the drop-in feature is in a stable release, `mcp-use: "latest"` is enough.
+Once PR #1332 is merged and released, swap the pin for:
+
+```bash
+npm install mcp-use@latest
+```

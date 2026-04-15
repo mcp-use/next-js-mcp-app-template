@@ -11,13 +11,14 @@
     "mcp:start": "mcp-use start --mcp-dir src/mcp"
   },
   "dependencies": {
-    "mcp-use": "latest",
+    "mcp-use": "https://pkg.pr.new/mcp-use@1332",
     "next": "16.2.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "zod": "^4.0.0"
   },
   "devDependencies": {
+    "@mcp-use/cli": "https://pkg.pr.new/@mcp-use/cli@1332",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
