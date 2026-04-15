@@ -8,7 +8,7 @@ Two options, both bad.
 
 ## Option 1: "The Next.js app *is* the MCP app"
 
-Vercel published a walkthrough for this pattern. It works — if your Next.js app was built for it from day one. To retrofit it onto an existing app, you sign up for:
+Vercel published a walkthrough for this pattern. It works, but only if your Next.js app was built for it from day one. To retrofit it onto an existing app, you sign up for:
 
 - `assetPrefix` rewriting so assets load from the MCP host
 - A `<base href>` tag injected into every page
@@ -19,7 +19,7 @@ Vercel published a walkthrough for this pattern. It works — if your Next.js ap
 - CORS middleware on every API route
 - External link interception via `window.openai.openExternal()`
 
-None of these are hard individually. Added on top of an existing app that already has an auth provider, an `OrganizationContext`, a root layout with Sentry + PostHog + FullStory, and a dozen API integrations, they are fragile. Vercel's own post says this out loud — which is the honest thing — but it doesn't help you if you already have the app.
+None of these are hard individually. Added on top of an existing app that already has an auth provider, an `OrganizationContext`, a root layout with Sentry + PostHog + FullStory, and a dozen API integrations, they are fragile. Vercel's own post says this out loud (which is the honest thing), but it doesn't help you if you already have the app.
 
 ## Option 2: Maintain a sibling MCP package
 
@@ -29,7 +29,7 @@ Both paths end in the same place: two codebases, two mental models, two on-call 
 
 ## Option 3: Physical process separation, shared source
 
-The third option — what we shipped in [mcp-use#1332](https://github.com/mcp-use/mcp-use/pull/1332) and packaged as [mcp-use/next-js-mcp-app-template](https://github.com/mcp-use/next-js-mcp-app-template) — is to run the MCP server as a **separate Node process** that still lives inside the Next.js repo.
+The third option, which we shipped in [mcp-use#1332](https://github.com/mcp-use/mcp-use/pull/1332) and packaged as [mcp-use/next-js-mcp-app-template](https://github.com/mcp-use/next-js-mcp-app-template), is to run the MCP server as a **separate Node process** that still lives inside the Next.js repo.
 
 ```
 my-app/
@@ -38,9 +38,9 @@ my-app/
 ├── src/
 │   ├── app/                     # the Next.js app (unchanged)
 │   ├── components/
-│   │   └── GreetingCard.tsx     # shared — used by the page AND the widget
+│   │   └── GreetingCard.tsx     # shared: used by the page AND the widget
 │   ├── lib/
-│   │   └── greetings.ts         # shared — called by the page AND the MCP tool
+│   │   └── greetings.ts         # shared: called by the page AND the MCP tool
 │   └── mcp/                     # the only new subtree
 │       ├── index.ts             # MCPServer + tool registrations
 │       └── resources/
@@ -56,7 +56,7 @@ From inside `src/mcp/index.ts`:
 import { MCPServer, text } from "mcp-use/server";
 import { z } from "zod";
 
-// Import anything — services, DB clients, shared types — just like any
+// Import anything (services, DB clients, shared types) just like any
 // other file in your Next.js app would.
 import { buildGreeting } from "@/lib/greetings";
 
@@ -101,15 +101,15 @@ That's all the code. No `next.config.js` changes, no `<base>` tag, no CORS middl
 
 The "drop in" feeling comes from four things `@mcp-use/cli` does when it sees `next` in your `package.json`:
 
-**1. `@/*` resolution through your project tsconfig.** MCP tools compile through tsx; widgets compile through Vite. We wired both to read your project's `tsconfig.json` and its `paths` entries — the same way `next dev` does — via a namespace-less `tsx/esm/api.register` + `tsx/cjs/api.register` pair plus `vite-tsconfig-paths` in the widget build. `@/lib/...` imports resolve to the same files `next dev` resolves them to, using the same rules.
+**1. `@/*` resolution through your project tsconfig.** MCP tools compile through tsx; widgets compile through Vite. We wired both to read your project's `tsconfig.json` and its `paths` entries (the same way `next dev` does) via a namespace-less `tsx/esm/api.register` + `tsx/cjs/api.register` pair plus `vite-tsconfig-paths` in the widget build. `@/lib/...` imports resolve to the same files `next dev` resolves them to, using the same rules.
 
-(An earlier iteration of this tried to use tsx's `tsImport` helper. That helper registers tsx with a *generated namespace*, and tsx's resolver bails with `return nextResolve(...)` for any specifier whose parent URL doesn't carry that namespace — which means transitive `@/lib/...` imports silently fall through to Node's default resolver and fail with `Cannot find package '@/lib'`. Dropping the namespace makes tsx's resolver run uniformly on every specifier.)
+(An earlier iteration of this tried to use tsx's `tsImport` helper. That helper registers tsx with a *generated namespace*, and tsx's resolver bails with `return nextResolve(...)` for any specifier whose parent URL doesn't carry that namespace. That means transitive `@/lib/...` imports silently fall through to Node's default resolver and fail with `Cannot find package '@/lib'`. Dropping the namespace makes tsx's resolver run uniformly on every specifier.)
 
-**2. Auto-shimmed Next.js server-runtime modules.** Anything you import from `@/lib/...` may transitively pull in `server-only`, `next/cache`, `next/headers`, `next/navigation`, or `next/server`. All of those throw or misbehave outside an RSC request context. The CLI detects `next` in your package.json and installs a pair of loader hooks — one for ESM `import`, one for CJS `require` (the latter because tsx compiles `.ts` to CJS in any non-`"type": "module"` package) — that resolve each specifier to an inert stub. Your tool can `import { cookies } from "next/headers"` and get a `cookies()` that returns empty, not a crash.
+**2. Auto-shimmed Next.js server-runtime modules.** Anything you import from `@/lib/...` may transitively pull in `server-only`, `next/cache`, `next/headers`, `next/navigation`, or `next/server`. All of those throw or misbehave outside an RSC request context. The CLI detects `next` in your package.json and installs a pair of loader hooks that resolve each specifier to an inert stub: one hook covers ESM `import`, the other covers CJS `require` (the latter because tsx compiles `.ts` to CJS in any non-`"type": "module"` package). Your tool can `import { cookies } from "next/headers"` and get a `cookies()` that returns empty, not a crash.
 
 **3. Next.js env cascade, mirrored.** `next dev` loads `.env` → `.env.development` → `.env.local` → `.env.development.local` in priority order. `mcp-use dev` runs the same cascade before starting your server, so `process.env.SUPABASE_SERVICE_ROLE_KEY` is populated the same way it would be under Next.
 
-**4. React dedupe across the widget iframe.** Widgets run in an iframe with Vite-served React. Without aggressive dedupe, an HMR cycle can introduce a second React module instance and the next render throws `Cannot read properties of null (reading 'useState')` — the classic hooks-dispatcher-mismatch crash. We broadened Vite's `resolve.dedupe` to cover `react`, `react-dom`, `react/jsx-runtime`, `react/jsx-dev-runtime`, and `react-dom/client`, which keeps one runtime instance alive through any number of edits.
+**4. React dedupe across the widget iframe.** Widgets run in an iframe with Vite-served React. Without aggressive dedupe, an HMR cycle can introduce a second React module instance and the next render throws `Cannot read properties of null (reading 'useState')`. That's the classic hooks-dispatcher-mismatch crash. We broadened Vite's `resolve.dedupe` to cover `react`, `react-dom`, `react/jsx-runtime`, `react/jsx-dev-runtime`, and `react-dom/client`, which keeps one runtime instance alive through any number of edits.
 
 None of those show up in your code. You write `src/mcp/index.ts` the same way you'd write any other server file in your Next.js app.
 
