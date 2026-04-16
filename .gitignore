@@ -43,3 +43,4 @@ next-env.d.ts
 # mcp-use CLI working dirs
 .mcp-use/
 /dist/mcp/
+dist/
