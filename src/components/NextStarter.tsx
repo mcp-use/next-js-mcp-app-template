@@ -189,18 +189,34 @@ function BrandLockup({ className }: { className?: string }) {
   );
 }
 
-export function NextStarter({ theme }: { theme?: "light" | "dark" } = {}) {
+export function NextStarter({
+  theme,
+  embed = false,
+}: { theme?: "light" | "dark"; embed?: boolean } = {}) {
   // The web app leaves `theme` unset and renders in light mode. The MCP
   // widget wires `theme` to `useWidgetTheme()` so the same component
   // follows the host's light/dark switch. Tailwind's `dark:` variants are
   // gated on the `.dark` class (see `src/app/globals.css`).
+  //
+  // `embed` trims the layout for the widget iframe (no min-h-screen, no
+  // empty 20px top row) so autoSize can hug the actual content height.
+  const layoutClass = embed
+    ? "flex flex-col items-center gap-10 p-8 sm:p-12"
+    : "grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16 p-8 pb-20 sm:p-20";
   const wrapperClass =
-    "grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen gap-16 p-8 pb-20 font-sans sm:p-20 bg-white text-black dark:bg-black dark:text-white" +
+    layoutClass +
+    " font-sans bg-white text-black dark:bg-black dark:text-white" +
     (theme === "dark" ? " dark" : "");
+  const mainClass = embed
+    ? "flex flex-col items-center gap-8"
+    : "row-start-2 flex flex-col items-center gap-8 sm:items-start";
+  const footerClass = embed
+    ? "flex flex-wrap items-center justify-center gap-x-6 gap-y-2"
+    : "row-start-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2";
 
   return (
     <div className={wrapperClass}>
-      <main className="row-start-2 flex flex-col items-center gap-8 sm:items-start">
+      <main className={mainClass}>
         <BrandLockup />
         <ol className="list-inside list-decimal text-center font-mono text-sm/6 sm:text-left">
           <li className="mb-2 tracking-[-.01em]">
@@ -234,7 +250,7 @@ export function NextStarter({ theme }: { theme?: "light" | "dark" } = {}) {
           </a>
         </div>
       </main>
-      <footer className="row-start-3 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+      <footer className={footerClass}>
         <a
           className="flex items-center gap-2 text-sm hover:underline hover:underline-offset-4"
           href="https://docs.mcp-use.com"

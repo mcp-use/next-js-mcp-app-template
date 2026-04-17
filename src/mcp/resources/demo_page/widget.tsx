@@ -42,7 +42,7 @@ export default function DemoPageWidget() {
 
   return (
     <McpUseProvider autoSize>
-      <NextStarter theme={theme} />
+      <NextStarter theme={theme} embed />
     </McpUseProvider>
   );
 }
