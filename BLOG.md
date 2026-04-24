@@ -29,7 +29,7 @@ Both paths end in the same place: two codebases, two mental models, two on-call 
 
 ## Option 3: Physical process separation, shared source
 
-The third option, which we shipped in [mcp-use#1332](https://github.com/mcp-use/mcp-use/pull/1332) and packaged as [mcp-use/next-js-mcp-app-template](https://github.com/mcp-use/next-js-mcp-app-template), is to run the MCP server as a **separate Node process** that still lives inside the Next.js repo.
+The third option, which we shipped in [mcp-use v1.25.0](https://manufact.com/docs/typescript/changelog/changelog#v1-25-0) and packaged as [mcp-use/next-js-mcp-app-template](https://github.com/mcp-use/next-js-mcp-app-template), is to run the MCP server as a **separate Node process** that still lives inside the Next.js repo.
 
 ```
 my-app/
@@ -172,5 +172,5 @@ The motivating customer has a Next.js 16 + React 19 + Supabase app with ~50 assi
 If you've been putting off shipping MCP because it felt like a second codebase on the side of your main one, this is the fix.
 
 - **Template:** https://github.com/mcp-use/next-js-mcp-app-template (click "Use this template")
-- **PR:** https://github.com/mcp-use/mcp-use/pull/1332
-- **CLI:** `@mcp-use/cli@canary` (ships with the next stable release)
+- **Release:** https://manufact.com/docs/typescript/changelog/changelog#v1-25-0
+- **Requires:** `mcp-use >= 1.25.0`

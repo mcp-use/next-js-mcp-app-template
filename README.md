@@ -84,13 +84,7 @@ Env vars are managed independently on each provider. `.env.local` stays on Verce
 
 ## Version requirement
 
-This template relies on the `mcp-use` drop-in Next.js features (`--mcp-dir` flag, auto-shim, widget dedupe) from [mcp-use/mcp-use#1332](https://github.com/mcp-use/mcp-use/pull/1332). Until that PR ships in a stable release, the template pins `mcp-use` to the per-PR snapshot build published by [pkg.pr.new](https://pkg.pr.new):
-
-```json
-"mcp-use": "https://pkg.pr.new/mcp-use@1332"
-```
-
-Once PR #1332 is merged and released, swap the pin for:
+This template requires `mcp-use >= 1.25.0`, which introduced the Next.js drop-in features (`--mcp-dir` flag, auto-shim, widget dedupe). See the [v1.25.0 changelog](https://manufact.com/docs/typescript/changelog/changelog#v1-25-0) for details.
 
 ```bash
 npm install mcp-use@latest
