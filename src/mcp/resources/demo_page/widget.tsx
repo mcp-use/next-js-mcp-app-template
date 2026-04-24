@@ -12,11 +12,11 @@ import { z } from "zod";
 // `prefers-color-scheme` gate and stop responding to `useWidgetTheme()`.
 import "@/app/globals.css";
 
-// The SAME component the Next.js home page renders. Resolved through the
-// project's `@/*` tsconfig path — one source of truth for both the web
-// page and the MCP widget. Edit NextStarter once, see the change in
-// both places on the next HMR cycle.
-import { NextStarter } from "@/components/NextStarter";
+// The SAME component the Next.js home page renders. `StarterPage` lives
+// in `src/app/page.tsx` so users can edit the real starter JSX in the
+// file the onscreen hint points them at — the widget picks up the
+// change on the next HMR cycle.
+import { StarterPage } from "@/app/page";
 
 const propsSchema = z.object({});
 
@@ -42,7 +42,7 @@ export default function DemoPageWidget() {
 
   return (
     <McpUseProvider autoSize>
-      <NextStarter theme={theme} embed />
+      <StarterPage theme={theme} embed />
     </McpUseProvider>
   );
 }
