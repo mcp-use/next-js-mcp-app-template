@@ -11,7 +11,7 @@
     "mcp:start": "mcp-use start --mcp-dir src/mcp"
   },
   "dependencies": {
-    "mcp-use": "https://pkg.pr.new/mcp-use@1332",
+    "mcp-use": "1.25.0",
     "next": "16.2.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
