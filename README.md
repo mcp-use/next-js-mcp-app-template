@@ -1,3 +1,5 @@
+<img width="1200" height="630" alt="image" src="https://github.com/user-attachments/assets/e6616a30-7829-4f69-8349-7db82b41d040" />
+
 # Next.js + MCP drop-in template
 
 A standard [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app) scaffold with one new folder: `src/mcp/`. That folder holds an MCP server and its widgets, and it imports from the rest of the Next.js app via the same `@/` alias `src/app/` uses. No sibling package, no duplicated components, no second codebase.
